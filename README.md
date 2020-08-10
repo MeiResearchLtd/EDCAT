@@ -19,12 +19,15 @@ Install on ocpu.pilrhealth.com:
 
 Newer
 
+    THis is what you have to do. Unfortunately you have to use 'sudo R' and paste each commmand.  I don't know why script fails
+
     sudo Rscript --slave --no-save --no-restore-history -e '
       library(remotes)
-      remove.packages(c('mirt', 'mirtCAT', 'EDCAT')
+      remove.packages(c('mirt', 'mirtCAT', 'EDCAT'))
       install_github(repo="https://github.com/philchalmers/mirt.git", ref="v1.30", force=TRUE)
       install_github(repo="https://github.com/philchalmers/mirtCAT.git", ref="v1.9.3", force=TRUE)
-      install_github(repo="https://github.com/MeiResearchLtd/EDCAT.git")'
+      install_github(repo="https://github.com/MeiResearchLtd/EDCAT.git")
+      '
 
 ## Testing with Curl
 
