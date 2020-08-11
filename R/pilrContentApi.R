@@ -64,7 +64,8 @@ pilrContentApi <- function(participantCode, resultsSoFar, sourceCard,
     calculatedCard <- buildSelectCard(nextQuestionIx, nextQuestionInfo, sourceCard$section, text) 
     nextCalcCard <- sourceCard
     nextCalcCard$section <- nextCalcCard$section + 1
-
+    nextCalcCard$data$code <- paste0('after:', nextQuestionIx)
+   
     # Return result compatible with both old & new api
     cards = list(calculatedCard, nextCalcCard)
     list( result = cards,  # old expected property
