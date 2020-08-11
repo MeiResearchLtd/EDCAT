@@ -65,8 +65,12 @@ pilrContentApi <- function(participantCode, resultsSoFar, sourceCard,
     nextCalcCard <- sourceCard
     nextCalcCard$section <- nextCalcCard$section + 1
 
-    #list(cards=list(calculatedCard, nextCalcCard))
-    list(result=list(calculatedCard, nextCalcCard))
+    # Return result compatible with both old & new api
+    cards = list(calculatedCard, nextCalcCard)
+    list( result = cards,  # old expected property
+          cards =  cards   # new expected Property
+    ) 
+    
   },
   error = function(error_condition) {
     list(error=as.character(error_condition))
