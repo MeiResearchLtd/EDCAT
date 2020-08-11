@@ -68,7 +68,8 @@ pilrContentApi <- function(participantCode, resultsSoFar, sourceCard,
     # Return result compatible with both old & new api
     cards = list(calculatedCard, nextCalcCard)
     list( result = cards,  # old expected property
-          cards =  cards   # new expected Property
+          cards =  cards,  # new expected Property
+          expiration_timestamp = timestamp
     ) 
     
   },
