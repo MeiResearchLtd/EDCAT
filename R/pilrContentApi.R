@@ -29,7 +29,11 @@
 #' @export
 pilrContentApi <- function(participantCode, resultsSoFar, sourceCard,
                              # following parameters are test hooks.
-                             findNextFn = findNextQuestionIx) {
+                             findNextFn = findNextQuestionIx,
+                             # unsused parameters from new AP
+                             timestamp=NULL, currentSettings=NULL, securityToken=NULL, language=NULL,
+                             ext=NULL
+                           ) {
   param <- buildParamFn(sourceCard$data$args)
 
   tryCatch({
