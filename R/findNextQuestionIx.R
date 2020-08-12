@@ -25,9 +25,19 @@
 #' Shiny app as follows:
 #'
 #'   load("MultiCATinput_EPSI_09-21-18.RData")
-#;   saveRDS(mmod3, 'data/epsi/mmod3.rds')
-#;   saveRDS(questions, 'data/epsi/questions')
-#;   saveRDS(options.rds, 'data/epsi/options.rds')
+#'   epsi <- list(mo=mmod3, options=options, 
+#'                design=list(min_SEM = 0.5), 
+#'                start_item = 'Trule',
+#'                df <- data.frame(Question = as.vector(questions), 
+#'                                 Option = options, 
+#'                                 Type = "radio", 
+#'                                 stringsAsFactors = F)
+#'                preCAT = list(min_items = 15, 
+#'                             max_items = length(questions),
+#'                             method = 'MAP',
+#'                             criteria = 'Trule',
+#'                             response_variance = T))
+#'  save(epsi, file='data/epsi.RData')
 #'
 #' This changes makes it more obvious what variables are being set.
 #' They are loaded by the survey.defintion() function
@@ -41,7 +51,7 @@
 #'                     after answering this many questions.
 #' @param survey is the name of thed data subdirecory containing RDS files defining the survey
 #' @return index of the next question to ask
-#'
+#'e
 #' @import mirtCAT
 #' @export
 findNextQuestionIx <- function(questionsAsked, answers, maxQuestions = 10000, survey = 'epsi') {
@@ -119,18 +129,6 @@ buildExtraValues <- function(mcState) {
   )
 }
 
-titleForQuestion <- function(questionIx, survey.def) {
-  survey.def$df$Question[[questionIx]]
-}
-
-optionTextsForQuestion <- function(questionIx, survey.def) {
-  survey.def$options[questionIx,]
-}
-
-questionIxMatching <- function(text, survey.def) {
-  match(text, survey.def$df$Question)
-}
-
 # Run the original, shiny version of same test with the same input parameters
 #' @export
 shiningPath <- function(survey = 'epsi') {
@@ -149,21 +147,24 @@ shiningPath <- function(survey = 'epsi') {
           shinyGUI = GUI)
 }
 
-# Creat a function to load the data that defines a survey from a specified data directory
-.make.survey.definition.fn = function() {
+# Create a function to load the data that defines a survey from a specified data directory.
+#
+.build.survey.definition.fn = function() {
   loaded.survey <- ''
   survey.def <- NULL
-  fn <- function(survey) {
+
+  function(survey) {
     survey = unlist(survey)
     if (loaded.survey != survey) {
       print(paste('loading survey:', survey))
-      data(list=survey)
+      data(list=survey, envir = environment())
       survey.def <<- get(survey)
       loaded.survey <<- survey
     }
-    return(survey.def)
+    survey.def
   }
 }
 # Load the data that defines a survey from a specified data directory
+# Uses a builder function so it can cache its result privately.
 # @param survey is the name of the data subdirectory.
-survey.defintition <- .make.survey.definition.fn()
+survey.defintition <- .build.survey.definition.fn()
