@@ -29,7 +29,11 @@
 #' @export
 pilrContentApi <- function(participantCode, resultsSoFar, sourceCard,
                              # following parameters are test hooks.
-                             findNextFn = findNextQuestionIx) {
+                             findNextFn = findNextQuestionIx,
+                             # unsused parameters from new AP
+                             timestamp=NULL, currentSettings=NULL, securityToken=NULL, language=NULL,
+                             ext=NULL
+                           ) {
   param <- buildParamFn(sourceCard$data$args)
 
   tryCatch({
@@ -60,9 +64,15 @@ pilrContentApi <- function(participantCode, resultsSoFar, sourceCard,
     calculatedCard <- buildSelectCard(nextQuestionIx, nextQuestionInfo, sourceCard$section, text) 
     nextCalcCard <- sourceCard
     nextCalcCard$section <- nextCalcCard$section + 1
-
-    #list(cards=list(calculatedCard, nextCalcCard))
-    list(result=list(calculatedCard, nextCalcCard))
+    nextCalcCard$data$code <- paste0('after:', nextQuestionIx)
+   
+    # Return result compatible with both old & new api
+    cards = list(calculatedCard, nextCalcCard)
+    list( result = cards,  # old expected property
+          cards =  cards,  # new expected Property
+          expiration_timestamp = timestamp
+    ) 
+    
   },
   error = function(error_condition) {
     list(error=as.character(error_condition))
