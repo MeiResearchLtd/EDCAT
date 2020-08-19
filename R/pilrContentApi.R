@@ -48,13 +48,14 @@ pilrContentApi <- function(participantCode, resultsSoFar, sourceCard,
     nextQuestionIx <- r$questionIx
 
     if (!is.numeric(nextQuestionIx)) {
-      return(list(
-        #cards=list(buildDoneCard(sourceCard$section)),
-        result=list(buildDoneCard(sourceCard$section)),
-        extra_values=extraValues))
+      # End of test: return DONE card & extra values 
+      cards <- list(buildDoneCard(sourceCard$section))
+      return(list( cards = cards,
+                   result = cards,
+                   extra_values = r$extraValues,
+                   expiration_timestamp = timestamp ))
     }
     nextQuestionInfo <- r$questionInfo
-    extraValues <- r$extraValues
     
     text <- if (as.logical(param('debug', FALSE))) {
       paste0('(question #', nextQuestionIx, ')') 
@@ -67,7 +68,7 @@ pilrContentApi <- function(participantCode, resultsSoFar, sourceCard,
     nextCalcCard$data$code <- paste0('after:', nextQuestionIx)
    
     # Return result compatible with both old & new api
-    cards = list(calculatedCard, nextCalcCard)
+    cards <- list(calculatedCard, nextCalcCard)
     list( result = cards,  # old expected property
           cards =  cards,  # new expected Property
           expiration_timestamp = timestamp
