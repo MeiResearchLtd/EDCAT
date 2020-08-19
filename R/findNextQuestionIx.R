@@ -19,29 +19,8 @@
 #'
 #' Look at ?mirtCAT::findNext for examples of how to modify buildMirtCatStateObject()
 #'
-#' DATA FILES
+#' See survey.definition.R for how the data definiing the survey and other test parameters are set.
 #'
-#' The data/<survey>/ files were extracted from MultiCATinput_EPSI_09-21-18.RData from the demo
-#' Shiny app as follows:
-#'
-#'   load("MultiCATinput_EPSI_09-21-18.RData")
-#'   epsi <- list(mo=mmod3, options=options, 
-#'                design=list(min_SEM = 0.5), 
-#'                start_item = 'Trule',
-#'                df <- data.frame(Question = as.vector(questions), 
-#'                                 Option = options, 
-#'                                 Type = "radio", 
-#'                                 stringsAsFactors = F)
-#'                preCAT = list(min_items = 15, 
-#'                             max_items = length(questions),
-#'                             method = 'MAP',
-#'                             criteria = 'Trule',
-#'                             response_variance = T))
-#'  save(epsi, file='data/epsi.RData')
-#'
-#' This changes makes it more obvious what variables are being set.
-#' They are loaded by the survey.defintion() function
-
 #' Calculate next question to ask
 #'
 #'
