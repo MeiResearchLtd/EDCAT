@@ -146,25 +146,3 @@ shiningPath <- function(survey = 'epsi') {
           start_item = sd$start_item,
           shinyGUI = GUI)
 }
-
-# Create a function to load the data that defines a survey from a specified data directory.
-#
-.build.survey.definition.fn = function() {
-  loaded.survey <- ''
-  survey.def <- NULL
-
-  function(survey) {
-    survey = unlist(survey)
-    if (loaded.survey != survey) {
-      print(paste('loading survey:', survey))
-      data(list=survey, envir = environment())
-      survey.def <<- get(survey)
-      loaded.survey <<- survey
-    }
-    survey.def
-  }
-}
-# Load the data that defines a survey from a specified data directory
-# Uses a builder function so it can cache its result privately.
-# @param survey is the name of the data subdirectory.
-survey.defintition <- .build.survey.definition.fn()

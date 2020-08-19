@@ -2,6 +2,9 @@
 
 findNextQuestionDF <- function(qs, as, survey) {
   lst <- findNextQuestionIx(qs, as, survey=survey)
+  if (is.na(lst$questionIx)) {
+    return(data.frame(ix=NA, Question='done'))
+  }
   df <- lst$questionInfo
   df$ix <- lst$questionIx
   row.names(df) = NULL
@@ -24,6 +27,7 @@ runTest <- function (stepCount=1, answers =  c(rep(1,stepCount)), survey = 'epsi
       break
     }
   }
+  result$Resp = c(answers, NA)
   result
 }
 
