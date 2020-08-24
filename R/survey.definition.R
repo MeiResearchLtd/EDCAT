@@ -36,6 +36,7 @@ survey.defintition <- (function() {
   current.survey <- ''
   current.survey.definition <- NULL
   function(survey) {
+    survey = unlist(survey)
     if (current.survey != survey) {
       print(paste('loading survey:', survey))
       current.survey.definition <<- .load.survey.definition(survey)
