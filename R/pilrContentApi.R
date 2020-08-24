@@ -144,6 +144,9 @@ dumperOld <- function(participantCode, resultsSoFar, sourceCard,
                       ext=NULL,
                       ...unused) {
   fn <- 'dumped-stuff.R'
-  dump(c('participantCode', 'resultsSoFar', 'sourceCard', 'unused'), file=fn)
+  dump(c('participantCode', 'resultsSoFar', 'sourceCard', 
+         'timestamp', 'currentSettings', 'securityToken', 'language',
+         'ext', 'unused'), 
+       file=fn)
   readChar(fn, file.info(fn)$size)
 }
