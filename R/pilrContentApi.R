@@ -28,11 +28,12 @@
 #'
 #' @export
 pilrContentApi <- function(participantCode, resultsSoFar, sourceCard,
-                             # following parameters are test hooks.
-                             findNextFn = findNextQuestionIx,
                              # unsused parameters from new AP
                              timestamp=NULL, currentSettings=NULL, securityToken=NULL, language=NULL,
-                             ext=NULL
+                             ext=NULL,
+                              # following parameter is test hooks.
+                             findNextFn = findNextQuestionIx,
+                            ...unsused
                            ) {
   param <- buildParamFn(sourceCard$data$args)
 
@@ -48,13 +49,14 @@ pilrContentApi <- function(participantCode, resultsSoFar, sourceCard,
     nextQuestionIx <- r$questionIx
 
     if (!is.numeric(nextQuestionIx)) {
-      return(list(
-        #cards=list(buildDoneCard(sourceCard$section)),
-        result=list(buildDoneCard(sourceCard$section)),
-        extra_values=extraValues))
+      # End of test: return DONE card & extra values 
+      cards <- list(buildDoneCard(sourceCard$section))
+      return(list( cards = cards,
+                   result = cards,
+                   extra_values = r$extraValues,
+                   expiration_timestamp = timestamp ))
     }
     nextQuestionInfo <- r$questionInfo
-    extraValues <- r$extraValues
     
     text <- if (as.logical(param('debug', FALSE))) {
       paste0('(question #', nextQuestionIx, ')') 
@@ -67,7 +69,7 @@ pilrContentApi <- function(participantCode, resultsSoFar, sourceCard,
     nextCalcCard$data$code <- paste0('after:', nextQuestionIx)
    
     # Return result compatible with both old & new api
-    cards = list(calculatedCard, nextCalcCard)
+    cards <- list(calculatedCard, nextCalcCard)
     list( result = cards,  # old expected property
           cards =  cards,  # new expected Property
           expiration_timestamp = timestamp
@@ -137,8 +139,14 @@ buildDoneCard <- function(section, title= 'Finished', text='Thank you! Please pr
 
 # dump inputs passed by openCPU for use in sample-parameters.R for testing
 #' @export
-dumperOld <- function(participantCode, resultsSoFar, sourceCard) {
+dumperOld <- function(participantCode, resultsSoFar, sourceCard, 
+                      timestamp=NULL, currentSettings=NULL, securityToken=NULL, language=NULL,
+                      ext=NULL,
+                      ...unused) {
   fn <- 'dumped-stuff.R'
-  dump(c('participantCode', 'resultsSoFar', 'sourceCard'), file=fn)
+  dump(c('participantCode', 'resultsSoFar', 'sourceCard', 
+         'timestamp', 'currentSettings', 'securityToken', 'language',
+         'ext', 'unused'), 
+       file=fn)
   readChar(fn, file.info(fn)$size)
 }
